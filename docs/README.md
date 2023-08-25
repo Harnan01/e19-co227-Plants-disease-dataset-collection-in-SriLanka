@@ -33,7 +33,7 @@ This is a sample image, to show how to add images to your page. To learn more op
 
 ## Introduction
 
- description of the real world problem and solution, impact
+ Welcome to the Plant Diseases Data Collection and API Development project! This repository houses a curated dataset of plant diseases and a user-friendly API that provides easy access to this invaluable information. Whether you're a researcher, developer, or enthusiast in the field of agriculture and plant health, this project aims to empower you with accurate data and tools to address plant diseases effectively.
 
 ## Other Sub Topics
 
