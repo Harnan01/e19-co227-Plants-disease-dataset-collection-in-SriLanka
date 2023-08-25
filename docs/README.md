@@ -3,7 +3,7 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and title
-repository-name: e19-co227-Plants-disease-dataset-collection-in-SriLanka
+repository-name:e19-co227-Plants-disease-dataset-collection-in-SriLanka
 title:Plants Disease Dataset Collection in SriLanka
 ---
 
