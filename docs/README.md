@@ -2,13 +2,13 @@
 layout: home
 permalink: index.html
 
-repository-name:e19-co227-Plants-disease-dataset-collection-in-SriLanka
-title:Plants disease dataset collection in SriLanka
+repository-name: e19-co227-Plants-disease-dataset-collection-in-SriLanka
+title: Plants disease dataset collection in SriLanka
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
 
-# Plants Disease Dataset Collection in SriLanka
+# Plants disease dataset collection in SriLanka
 
 ---
 
@@ -19,25 +19,20 @@ This is a sample image, to show how to add images to your page. To learn more op
  -->
 
 ## Team
--  e19007, Achsuthan T., [email](mailto:e19007@eng.pdn.ac.lk)
--  e19069, Delini S., [email](mailto:e19069@eng.pdn.ac.lk)
--  e19134, Harnan M., [email](mailto:e19134@eng.pdn.ac.lk)
--  e19174, Jegatheesan S., [email](mailto:e19174@eng.pdn.ac.lk)
+-  E/19/007, Achsuthan T., [email](mailto:e19007@eng.pdn.ac.lk)
+-  E/19/069, Delini S., [email](mailto:e19069@eng.pdn.ac.lk)
+-  E/19/134, Harnan M., [email](mailto:e19134@eng.pdn.ac.lk)
+-  E/19/174,Jegatheesan M., [email](mailto:e19174@eng.pdn.ac.lk)
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Other Sub Topics](#other-sub-topics)
-3. [Links](#links)
+2. [Links](#links)
 
 ---
 
 ## Introduction
 
- Welcome to the Plant Diseases Data Collection and API Development project! This repository houses a curated dataset of plant diseases and a user-friendly API that provides easy access to this invaluable information. Whether you're a researcher, developer, or enthusiast in the field of agriculture and plant health, this project aims to empower you with accurate data and tools to address plant diseases effectively.
-
-## Other Sub Topics
-
-.....
+Welcome to the Plant Diseases Data Collection and API Development project! This repository houses a curated dataset of plant diseases and a user-friendly API that provides easy access to this invaluable information. Whether you're a researcher, developer, or enthusiast in the field of agriculture and plant health, this project aims to empower you with accurate data and tools to address plant diseases effectively.
 
 ## Links
 
