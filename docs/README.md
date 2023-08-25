@@ -3,7 +3,7 @@ layout: home
 permalink: index.html
 
 repository-name:e19-co227-Plants-disease-dataset-collection-in-SriLanka
-title:Plants Disease Dataset Collection in SriLanka
+title:Plants disease dataset collection in SriLanka
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
