@@ -19,7 +19,7 @@ This is a sample image, to show how to add images to your page. To learn more op
  -->
 
 ## Team
--  E/19/007, Achsuthan T., [email](mailto:e19007@eng.pdn.ac.lk)
+-  E/19/007, Achsuthan T., e19007@eng.pdn.ac.lk
 -  E/19/069, Delini S., [email](mailto:e19069@eng.pdn.ac.lk)
 -  E/19/134, Harnan M., [email](mailto:e19134@eng.pdn.ac.lk)
 -  E/19/174,Jegatheesan M., [email](mailto:e19174@eng.pdn.ac.lk)
