@@ -3,13 +3,13 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and title
-repository-name: eYY-XXX-project-template
-title:
+repository-name: e19-co227-Plants-disease-dataset-collection-in-SriLanks
+title:Plants Disease Dataset Collection in SriLanka
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
 
-# Project Title
+# Plants Disease Dataset Collection in SriLanka
 
 ---
 
@@ -20,9 +20,10 @@ This is a sample image, to show how to add images to your page. To learn more op
  -->
 
 ## Team
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
+-  e19007, Achsuthan T., (mailto:e19007@eng.pdn.ac.lk)
+-  e19069, Delini S., [email](mailto:e19069@eng.pdn.ac.lk)
+-  e19134, Harnan M., [email](mailto:e19134@eng.pdn.ac.lk)
+-  e19174, Jegatheesan S., [email](mailto:e19174@eng.pdn.ac.lk)
 
 ## Table of Contents
 1. [Introduction](#introduction)
