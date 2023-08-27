@@ -22,7 +22,7 @@ This is a sample image, to show how to add images to your page. To learn more op
 -  E/19/007, Achsuthan T., e19007@eng.pdn.ac.lk
 -  E/19/069, Delini S., e19069@eng.pdn.ac.lk
 -  E/19/134, Harnan M., e19134@eng.pdn.ac.lk
--  E/19/174,Jegatheesan M., e19174@eng.pdn.ac.lk
+-  E/19/174,Jegatheesan S., e19174@eng.pdn.ac.lk
 
 ## Table of Contents
 1. [Introduction](#introduction)
