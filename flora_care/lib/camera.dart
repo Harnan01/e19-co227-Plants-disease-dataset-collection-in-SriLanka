@@ -65,97 +65,105 @@ class _CameraState extends State<Camera> {
     );
   }
 
-  Future selectImage() {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)), //this right here
-            child: Container(
-              height: 150,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  children: [
-                    Text(
-                      'Select Image From !',
-                      style: TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            selectedImagePath = await selectImageFromGallery();
-                            print('Image_Path:-');
-                            print(selectedImagePath);
-                            if (selectedImagePath != '') {
-                              Navigator.pop(context);
-                              setState(() {});
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("No Image Selected !"),
-                              ));
-                            }
-                          },
-                          child: Card(
-                              elevation: 5,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/gallery.png',
-                                      height: 60,
-                                      width: 60,
-                                    ),
-                                    Text('Gallery'),
-                                  ],
-                                ),
-                              )),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            selectedImagePath = await selectImageFromCamera();
-                            print('Image_Path:-');
-                            print(selectedImagePath);
+ Future<void> selectImage() async {
+  final double dialogHeight = MediaQuery.of(context).size.height * 0.25;
 
-                            if (selectedImagePath != '') {
-                              Navigator.pop(context);
-                              setState(() {});
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("No Image Captured !"),
-                              ));
-                            }
-                          },
-                          child: Card(
-                              elevation: 5,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/camera.png',
-                                      height: 60,
-                                      width: 60,
-                                    ),
-                                    Text('Camera'),
-                                  ],
-                                ),
-                              )),
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Container(
+          height: dialogHeight,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                Text(
+                  'Select Image From !',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        selectedImagePath = await selectImageFromGallery();
+                        print('Image_Path:-');
+                        print(selectedImagePath);
+                        if (selectedImagePath != '') {
+                          Navigator.pop(context);
+                          setState(() {});
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("No Image Selected !"),
+                          ));
+                        }
+                      },
+                      child: Card(
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/gallery.png',
+                                height: 60,
+                                width: 60,
+                              ),
+                              Text('Gallery'),
+                            ],
+                          ),
                         ),
-                      ],
-                    )
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        selectedImagePath = await selectImageFromCamera();
+                        print('Image_Path:-');
+                        print(selectedImagePath);
+
+                        if (selectedImagePath != '') {
+                          Navigator.pop(context);
+                          setState(() {});
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("No Image Captured !"),
+                          ));
+                        }
+                      },
+                      child: Card(
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/camera.png',
+                                height: 60,
+                                width: 60,
+                              ),
+                              Text('Camera'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ),
+              ],
             ),
-          );
-        });
-  }
+          ),
+        ),
+      );
+    },
+  );
+}
 
   selectImageFromGallery() async {
     XFile? file = await ImagePicker()
