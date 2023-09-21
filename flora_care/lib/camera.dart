@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'loading.dart';
 class Camera extends StatefulWidget {
   @override
   _CameraState createState() => _CameraState();
@@ -36,7 +38,7 @@ class _CameraState extends State<Camera> {
                   backgroundColor: MaterialStateProperty.all(Colors.green),
                   padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
                   textStyle:
-                      MaterialStateProperty.all(const TextStyle(fontSize: 14, color: Colors.white)),
+                      MaterialStateProperty.all(const TextStyle(fontSize: 15, color: Colors.white)),
                 ),
                 onPressed: () async {
                   selectImage();
@@ -49,10 +51,18 @@ class _CameraState extends State<Camera> {
                   backgroundColor: MaterialStateProperty.all(Colors.green),
                   padding: MaterialStateProperty.all(const EdgeInsets.all(20)),
                   textStyle:
-                      MaterialStateProperty.all(const TextStyle(fontSize: 14, color: Colors.white)),
+                      MaterialStateProperty.all(const TextStyle(fontSize: 15, color: Colors.white)),
                 ),
                 onPressed: () async {
                   // Handle the "Send" button action here
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Loading()),
+                  );
+
+                  await sendImage();
+
                 },
                 child: const Text('Send'),
               ),
@@ -185,4 +195,33 @@ class _CameraState extends State<Camera> {
       return '';
     }
   }
+
+  Future sendImage() async {
+    if (selectedImagePath.isEmpty) {
+      print('No image selected.');
+      return;
+    }
+
+    // Define the server URL where you want to send the image
+    final serverUrl = 'http://10.30.2.252:5000/predict'; // Replace with your actual server URL
+
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', Uri.parse(serverUrl));
+    request.files.add(await http.MultipartFile.fromPath('image', selectedImagePath));
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        // Handle a successful response from the server
+        print('Image sent successfully.');
+      } else {
+        // Handle an error response
+        print('Failed to send image. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+
 }
