@@ -1,115 +1,74 @@
-
 import 'package:flutter/material.dart';
-import 'Camera.dart';
+import 'package:connectivity/connectivity.dart';
+import 'nointernet.dart';
+import 'login.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() => runApp(
+  MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Loading(),
+  )
+);
+
+class Loading extends StatefulWidget {
+  @override
+  _LoadingState createState() => _LoadingState();
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class _LoadingState extends State<Loading> {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flora Care App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Home'),
-    );
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 5), () {
+      _checkInternetAndNavigate();
+    });
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  Future<void> _checkInternetAndNavigate() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // No internet connection, navigate to the no internet page
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => NoInternet(),
+      ));
+    } else {
+      // Internet connection available, navigate to the login page
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => LogIn(),
+      ));
+      
+    }
+  }
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Stack(
-        children: <Widget>[
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Welcome to FloraCare!',
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-            // Add your "Flora Care" feature widget here
-                FloraCareFeatureWidget(),
-            // You can add more widgets for other features here
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/ld-bg.jpg'), // Replace with your image asset path
+            fit: BoxFit.cover, // Adjust the fit mode as needed
+          ),
         ),
-      ),
-    Align(
-      alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Camera()),
-            );
-              },
-              tooltip: 'Capture',
-              child: Icon(Icons.camera_alt),
+            Text(
+              "FloraCare",
+              style: GoogleFonts.openSans(
+                textStyle: TextStyle(
+                  fontSize: 24, // Set the desired font size
+                  color: Colors.white, // Set the desired text color
+                ),
+              ),
             ),
-            SizedBox(height: 16.0), // Add some space between button and arrow
-            Icon(Icons.arrow_forward),
+            SizedBox(height: 20),
+            CircularProgressIndicator(color: Colors.white,),
           ],
-        ),
       ),
-    ),
-    ],
-   ),
-    );
-  }
-}
-
-// Define a simple "Flora Care" feature widget
-class FloraCareFeatureWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            "Your Personal Botanical Companion ",
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 20), // Add some space between text and image
-          Image.asset(
-            'assets/logo.png', // Provide the correct asset path
-            width: 150, // Adjust the width of the logo
-            height: 150, // Adjust the height of the logo
-          ),
-          // Add more content specific to your "Flora Care" feature here
-          // Example of adding an image
-
-          // You can continue adding more widgets as needed
-        ],
+      ),
       ),
     );
   }
