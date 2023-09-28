@@ -30,14 +30,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_native_splash: ^1.3.0
+  flutter_native_splash: ^2.3.2
 
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  image_picker: ^0.8.6
+  image_picker: ^1.0.4
+  simple_animations: ^5.0.2
+  get: ^4.6.6
+  lottie: ^2.6.0
+  google_fonts: ^6.1.0
+  connectivity: 3.0.6
+
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +67,10 @@ flutter:
     - assets/gallery.png
     - assets/image_placeholder.png
     - assets/connection_lost.jpg
+    - assets/siup-im.jpg
+    - assets/logo-rm.png
+    - assets/ld-bg.jpg
+    - assets/lgin-im.jpg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
