@@ -1,11 +1,13 @@
 import 'package:flora_care/signup.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:http/http.dart' as http;
 import '../constants.dart';
+import 'homepage.dart';
 import 'simple_ui_controller.dart';
+
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -19,7 +21,10 @@ class _LogInState extends State<LogIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   @override
   void dispose() {
@@ -30,6 +35,56 @@ class _LogInState extends State<LogIn> {
   }
 
   SimpleUIController simpleUIController = Get.put(SimpleUIController());
+  String? token;
+  int? id;
+
+  void logIn(String email, String password) async {
+  try {
+    final response = await http.post(
+      Uri.parse("http://192.168.8.155:8080/api/v1/auth/authenticate"), // Replace with your login API endpoint
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "email": email,
+        "password": password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("Login successful");
+      showSnackBar("Login successful");
+
+      final jsonResponse = json.decode(response.body);
+      token = jsonResponse['token'];
+      id = jsonResponse['id'];
+      print(token);
+      print(id);
+      Navigator.push(
+      context,
+        MaterialPageRoute(builder: (context) => MyApp()), // Replace with your home page widget
+      );
+
+      // Save the token in SharedPreferences or wherever you prefer to store it.
+      // Handle the successful login as needed.
+    } else {
+      print("Login failed. Status code: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
+      showSnackBar("Login failed. Please check your email and password.");
+    }
+  } catch (e) {
+    print("Error during HTTP request: $e");
+    showSnackBar("Error during login");
+  }
+}
+
+void showSnackBar(String message) {
+    final snackBar = SnackBar(content: Text(message));
+    _scaffoldKey.currentState?.showSnackBar(snackBar);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +93,7 @@ class _LogInState extends State<LogIn> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
         body: LayoutBuilder(
@@ -149,7 +205,7 @@ class _LogInState extends State<LogIn> {
                       style: kTextFormFieldStyle(),
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person),
-                        hintText: 'Username or Gmail',
+                        hintText: 'Email',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
                         ),
@@ -158,11 +214,11 @@ class _LogInState extends State<LogIn> {
                       // The validator receives the text that the user has entered.
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter username';
+                          return 'Please enter email';
                         } else if (value.length < 4) {
                           return 'at least enter 4 characters';
-                        } else if (value.length > 13) {
-                          return 'maximum character is 13';
+                        } else if (value.length > 30) {
+                          return 'maximum character is 30';
                         }
                         return null;
                       },
@@ -198,11 +254,11 @@ class _LogInState extends State<LogIn> {
                         // The validator receives the text that the user has entered.
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
+                            return 'Please enter password';
                           } else if (value.length < 7) {
                             return 'at least enter 6 characters';
-                          } else if (value.length > 13) {
-                            return 'maximum character is 13';
+                          } else if (value.length > 30) {
+                            return 'maximum character is 30';
                           }
                           return null;
                         },
@@ -292,10 +348,9 @@ class _LogInState extends State<LogIn> {
           ),
         ),
         onPressed: () {
-          // Validate returns true if the form is valid, or false otherwise.
           if (_formKey.currentState!.validate()) {
-            // ... Navigate To your Home Page
-          }
+          logIn(nameController.text, passwordController.text);
+        }
         },
         child: const Text(
           'Login',
