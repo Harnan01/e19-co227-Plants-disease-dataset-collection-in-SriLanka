@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 import '../constants.dart';
 import 'homepage.dart';
 import 'simple_ui_controller.dart';
+import 'package:hive/hive.dart';
+import 'HiveBoxes.dart';
+
 
 
 class LogIn extends StatefulWidget {
@@ -35,13 +38,13 @@ class _LogInState extends State<LogIn> {
   }
 
   SimpleUIController simpleUIController = Get.put(SimpleUIController());
-  String? token;
+  String token = "";
   int? id;
 
   void logIn(String email, String password) async {
   try {
     final response = await http.post(
-      Uri.parse("http://192.168.8.155:8080/api/v1/auth/authenticate"), // Replace with your login API endpoint
+      Uri.parse("http://192.168.8.155:8080/api/v1/auth/authenticate"),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -52,21 +55,20 @@ class _LogInState extends State<LogIn> {
     );
 
     if (response.statusCode == 200) {
-      print("Login successful");
-      showSnackBar("Login successful");
-
       final jsonResponse = json.decode(response.body);
       token = jsonResponse['token'];
       id = jsonResponse['id'];
-      print(token);
-      print(id);
-      Navigator.push(
-      context,
-        MaterialPageRoute(builder: (context) => MyApp()), // Replace with your home page widget
-      );
+      print("Login successful");
+      showSnackBar("Login successful");
 
-      // Save the token in SharedPreferences or wherever you prefer to store it.
-      // Handle the successful login as needed.
+      // Save the token in Hive
+      await saveTokenToHive(token);
+
+      // Navigate to the home page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyApp()),
+      );
     } else {
       print("Login failed. Status code: ${response.statusCode}");
       print("Response body: ${response.body}");
@@ -78,6 +80,13 @@ class _LogInState extends State<LogIn> {
     showSnackBar("Error during login");
   }
 }
+
+// Function to save the token in Hive
+Future<void> saveTokenToHive(String token) async {
+  final box = await Hive.openBox<String>(HiveBoxes.tokenBox);
+  await box.put('token', token);
+}
+
 
 void showSnackBar(String message) {
     final snackBar = SnackBar(content: Text(message));
