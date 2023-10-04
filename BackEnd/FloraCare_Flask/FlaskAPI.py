@@ -3,10 +3,18 @@ from flask import Flask, request, jsonify
 from PIL import Image
 import numpy as np
 import tensorflow as tf
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "http://192.168.8.155:63730"}})
 
-# Load your trained VGGNet model
+# Global variable to store the result
+result = {}
+
+
+
+
+# Load your trained  model
 model = tf.keras.models.load_model('model.h5')
 
 # Define a list of class labels (disease names)
@@ -21,6 +29,7 @@ spring_boot_api_url = "http://192.168.8.155:8080/api/v1/auth/diseaseName"  # Upd
 # Define an API endpoint to receive images and make predictions
 @app.route('/predict', methods=['POST'])
 def predict_disease():
+    global result
     try:
         # Get the image from the request
         image_file = request.files['image']
@@ -41,7 +50,7 @@ def predict_disease():
             probability_percentage = prediction[0][predicted_class_index] * 100  # Convert to percentage
 
             # Return the prediction result as JSON with class name and probability
-            result = {'prediction': predicted_class, 'probability_percentage': probability_percentage}
+            result = {'prediction': predicted_class, 'probability_percentage': probability_percentage,'predictedLabel': predicted_class}
 
             # Send the result label to your Spring Boot API
             send_result_to_spring_boot(result)
@@ -52,6 +61,21 @@ def predict_disease():
             return jsonify({'error': 'Image not found in request'})
     except Exception as e:
         return jsonify({'error': str(e)})
+    
+    
+# Define an API endpoint to get the predicted label
+@app.route('/get-predicted-label', methods=['GET'])
+def get_predicted_label():
+    try:
+        # Logic to retrieve and return the predictedLabel
+        # You can return it as JSON or plain text
+        predicted_label = result.get('prediction')
+ # Retrieve the predicted label from query parameters
+
+        return jsonify({'predictedLabel': predicted_label})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    
 
 
 def send_result_to_spring_boot(result):
@@ -66,4 +90,4 @@ def send_result_to_spring_boot(result):
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='192.168.8.155', port=5000, debug=True)
