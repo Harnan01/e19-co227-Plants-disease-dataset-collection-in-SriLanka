@@ -9,6 +9,7 @@ import 'homepage.dart';
 import 'simple_ui_controller.dart';
 import 'package:hive/hive.dart';
 import 'HiveBoxes.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 
@@ -44,7 +45,7 @@ class _LogInState extends State<LogIn> {
   void logIn(String email, String password) async {
   try {
     final response = await http.post(
-      Uri.parse("http://192.168.8.155:8080/api/v1/auth/authenticate"),
+      Uri.parse("http://192.168.8.156:8080/api/v1/auth/authenticate"),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -59,7 +60,7 @@ class _LogInState extends State<LogIn> {
       token = jsonResponse['token'];
       id = jsonResponse['id'];
       print("Login successful");
-      showSnackBar("Login successful");
+      
 
       // Save the token in Hive
       await saveTokenToHive(token);
@@ -73,11 +74,79 @@ class _LogInState extends State<LogIn> {
       print("Login failed. Status code: ${response.statusCode}");
       print("Response body: ${response.body}");
 
-      showSnackBar("Login failed. Please check your email and password.");
+      showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return Material(
+      type: MaterialType.transparency, // Make the material transparent
+      child: AlertDialog(
+        backgroundColor: Colors.white.withOpacity(1.0), // Set background color to transparent
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(27.0), // Adjust the radius as needed
+        ),
+        title: Text('Login Failed', style: GoogleFonts.openSans(fontSize: 20)),
+        content: Container(
+          width: 300,
+          height: 120,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Please check your Email or Password', style: GoogleFonts.openSans(fontSize: 16)),
+              SizedBox(height: 16),
+              TextButton(
+                child: Text('OK', style: GoogleFonts.openSans(fontSize: 18)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  },
+);
+
+
+      
     }
   } catch (e) {
     print("Error during HTTP request: $e");
-    showSnackBar("Error during login");
+
+    showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return Material(
+      type: MaterialType.transparency, // Make the material transparent
+      child: AlertDialog(
+        backgroundColor: Colors.white.withOpacity(1.0), // Set background color to transparent
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(27.0), // Adjust the radius as needed
+        ),
+        title: Text('Login Failed', style: GoogleFonts.openSans(fontSize: 20)),
+        content: Container(
+          width: 300,
+          height: 120,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Error during Server Connection', style: GoogleFonts.openSans(fontSize: 16)),
+              SizedBox(height: 16),
+              TextButton(
+                child: Text('OK', style: GoogleFonts.openSans(fontSize: 18)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  },
+);
   }
 }
 
@@ -87,11 +156,6 @@ Future<void> saveTokenToHive(String token) async {
   await box.put('token', token);
 }
 
-
-void showSnackBar(String message) {
-    final snackBar = SnackBar(content: Text(message));
-    _scaffoldKey.currentState?.showSnackBar(snackBar);
-  }
 
 
 
@@ -128,7 +192,7 @@ void showSnackBar(String message) {
         Expanded(
           flex: 4,
           child: Image.asset(
-            'assets/coin.jpg', // Replace with your image asset path
+            'assets/lgin-im.jpg', // Replace with your image asset path
             height: size.height * 0.25,
             width: double.infinity,
             fit: BoxFit.fill,
@@ -176,7 +240,7 @@ void showSnackBar(String message) {
                 ? Container()
                 : Image.asset(
                     'assets/lgin-im.jpg', // Replace with your image asset path
-                    height: size.height * 0.4,
+                    height: size.height * 0.32,
                     width: size.width,
                     fit: BoxFit.fill,
                   ),
@@ -342,29 +406,35 @@ void showSnackBar(String message) {
   }
 
   // Login Button
-  Widget loginButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 55,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor:
-              MaterialStateProperty.all(Color.fromARGB(255, 22, 175, 40)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
+Widget loginButton() {
+  return SizedBox(
+    width: double.infinity,
+    height: 55,
+    child: InkWell(
+      onTap: () {
+        if (_formKey.currentState!.validate()) {
+          logIn(nameController.text, passwordController.text);
+        }
+      },
+      splashColor: Color.fromARGB(100, 255, 255, 255), // Adjust the alpha (150) for more or less effect
+      child: Ink(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Color.fromARGB(255, 22, 175, 40),
+        ),
+        child: Center(
+          child: Text(
+            'Login',
+            style: TextStyle(
+              fontSize: 20, // Adjust the font size as needed
+              color: Colors.white, // Change the font color to white
+              fontFamily: 'GoogleSans', // Replace 'GoogleSans' with your desired Google Font family
             ),
           ),
         ),
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-          logIn(nameController.text, passwordController.text);
-        }
-        },
-        child: const Text(
-          'Login',
-        ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

@@ -18,6 +18,5 @@ public class Disease {
     private Long id;
     private String diseaseName;
     private String solution;
-    @Lob // Use this annotation to indicate that it's a large object (LOB) like a blob.
-    private byte[] image;
+    private String image;
 }

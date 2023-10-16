@@ -4,7 +4,7 @@ import 'package:flora_care/homepage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 
 import 'login.dart';
@@ -41,7 +41,7 @@ class _SignUpState extends State<SignUp> {
   void signUp(String username, String email, String password) async {
   try {
     final response = await http.post(
-      Uri.parse("http://192.168.8.155:8080/api/v1/auth/register"),
+      Uri.parse("http://192.168.8.156:8080/api/v1/auth/register"),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -54,7 +54,6 @@ class _SignUpState extends State<SignUp> {
 
     if (response.statusCode == 200) {
       print("Account successfully created");
-      showSnackBar("Successfully created account");
 
       // Save the token in SharedPreferences here
        final jsonResponse = json.decode(response.body);
@@ -66,20 +65,81 @@ class _SignUpState extends State<SignUp> {
     } else {
       print("Failed to create account. Status code: ${response.statusCode}");
       print("Response body: ${response.body}");
-      showSnackBar("The Email is already taken");
+      showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return Material(
+      type: MaterialType.transparency, // Make the material transparent
+      child: AlertDialog(
+        backgroundColor: Colors.white.withOpacity(1.0), // Set background color to transparent
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(27.0), // Adjust the radius as needed
+        ),
+        title: Text('Failed to create account', style: GoogleFonts.openSans(fontSize: 20)),
+        content: Container(
+          width: 300,
+          height: 120,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('The Email is already taken', style: GoogleFonts.openSans(fontSize: 16)),
+              SizedBox(height: 16),
+              TextButton(
+                child: Text('OK', style: GoogleFonts.openSans(fontSize: 18)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  },
+);
+
     }
   } catch (e) {
     print("Error during HTTP request: $e");
-    showSnackBar("Error during signup");
+
+    showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return Material(
+      type: MaterialType.transparency, // Make the material transparent
+      child: AlertDialog(
+        backgroundColor: Colors.white.withOpacity(1.0), // Set background color to transparent
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(27.0), // Adjust the radius as needed
+        ),
+        title: Text('Failed to create account', style: GoogleFonts.openSans(fontSize: 20)),
+        content: Container(
+          width: 300,
+          height: 120,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Error during signup', style: GoogleFonts.openSans(fontSize: 16)),
+              SizedBox(height: 16),
+              TextButton(
+                child: Text('OK', style: GoogleFonts.openSans(fontSize: 18)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  },
+);
+    
   }
 }
 
-
-
-void showSnackBar(String message) {
-    final snackBar = SnackBar(content: Text(message));
-    _scaffoldKey.currentState?.showSnackBar(snackBar);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -324,27 +384,36 @@ void showSnackBar(String message) {
   }
 
   // SignUp Button
-  Widget signUpButton(ThemeData theme) {
-    return SizedBox(
-      width: double.infinity,
-      height: 55,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 22, 175, 40)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
+ Widget signUpButton(ThemeData theme) {
+  return SizedBox(
+    width: double.infinity,
+    height: 55,
+    child: InkWell(
+      onTap: () {
+        if (_formKey.currentState!.validate()) {
+          signUp(nameController.text, emailController.text, passwordController.text);
+        }
+      },
+      splashColor: Color.fromARGB(100, 255, 255, 255), // Adjust the alpha (150) for more or less effect
+      child: Ink(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Color.fromARGB(255, 22, 175, 40),
+        ),
+        child: Center(
+          child: Text(
+            'Sign up',
+            style: TextStyle(
+              fontSize: 20, // Adjust the font size as needed
+              color: Colors.white, // Change the font color to white
+              fontFamily: 'GoogleSans', // Replace 'GoogleSans' with your desired Google Font family
             ),
           ),
         ),
-        onPressed: () {
-          // Validate returns true if the form is valid, or false otherwise.
-          if (_formKey.currentState!.validate()) {
-            signUp(nameController.text, emailController.text, passwordController.text);
-          }
-        },
-        child: const Text('Sign up'),
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 }
