@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin("http://localhost:65082")
+@CrossOrigin("http://192.168.8.156:50350")
 public class DiseaseController {
 
     @Autowired
@@ -42,14 +42,6 @@ public class DiseaseController {
             System.out.println(messsage);
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @PostMapping("/diseaseName")
-    public ResponseEntity<?> updateDiseaseLabel(@RequestBody Map<String, Object> result) {
-        // Handle the received result label here
-        Double probabilityPercentage = (Double) result.get("probability_percentage");
-
-        return ResponseEntity.ok("Result label received successfully");
     }
 
 
