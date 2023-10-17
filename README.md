@@ -28,5 +28,15 @@ Education: Raise awareness about plant diseases and their management.
 
 ![pytorch-logo-1](https://github.com/cepdnaclk/e19-co227-Plants-disease-dataset-collection-in-SriLanka/assets/114213808/cd20bdf9-4229-492f-aba5-e1539fc1231d)
 
+## Key features and functionalities
+Image recognition: Quickly identifies plant diseases from photos.
+Comprehensive database: Stores data on variuos plant diseases.
+User friendly UI: Intuitive and visually appealing interface.
+User history: Displays the user history.
+
+## Control flow
+
+![final](https://github.com/cepdnaclk/e19-co227-Plants-disease-dataset-collection-in-SriLanka/assets/114213808/1ecdae07-1a08-4635-b964-e26abbfef60f)
+
 ## Team
 E/19/007 - T.Achsuthan , E/19/069 - Delini S. , E/19/134 -  M.Harnan , E/19/174 - S.Jegatheesan
