@@ -51,6 +51,7 @@ dependencies:
   bouncing_button: ^0.0.1+2
   flutter_animated_button: ^2.0.3
   usage: ^4.1.1
+  google_nav_bar: ^5.0.6
   
 
 

@@ -6,7 +6,7 @@ import tensorflow as tf
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://192.168.8.156:50350"}})
+CORS(app, resources={r"/api/*": {"origins": "http://10.30.2.252:52990"}})
 
 # Global variable to store the result
 result = {}
@@ -24,7 +24,7 @@ class_labels = ["Tomato Bacterial spot", "Tomato Early blight", "Tomato Late bli
 input_image_size = (224, 224)  # Adjust this size based on your model's input requirements
 
 # Define the URL of your Spring Boot API
-spring_boot_api_url = "http://192.168.8.156:8080/api/v1/auth/diseaseName"  # Update with your Spring Boot API URL
+spring_boot_api_url = "http://10.30.2.252:8080/api/v1/auth/diseaseName"  # Update with your Spring Boot API URL
 
 # Define an API endpoint to receive images and make predictions
 @app.route('/predict', methods=['POST'])
@@ -90,4 +90,4 @@ def send_result_to_spring_boot(result):
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.8.156', port=5000, debug=True)
+    app.run(host='10.30.2.252', port=5000, debug=True)

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:get/get.dart';
+//import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart'; 
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'diseasedetailspage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'HiveBoxes.dart';
 
 class Camera1 extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -227,7 +228,7 @@ controller.setFlashMode(FlashMode.off);
     });
 
     // Define the server URL where you want to send the image
-    const serverUrl = 'http://192.168.8.156:5000/predict'; // Replace with your actual server URL
+    const serverUrl = 'http://10.30.2.252:5000/predict'; // Replace with your actual server URL
 
     // Create a multipart request
     var request = http.MultipartRequest('POST', Uri.parse(serverUrl));
@@ -260,7 +261,7 @@ controller.setFlashMode(FlashMode.off);
   }
 
   // Define the URL of your Flask API
-  const flaskApiUrl = 'http://192.168.8.156:5000/get-predicted-label';
+  const flaskApiUrl = 'http://10.30.2.252:5000/get-predicted-label';
   // Create an HTTP client
 
 
@@ -273,7 +274,7 @@ controller.setFlashMode(FlashMode.off);
       String predicted_Label = data['predictedLabel']; // Obtained from Flask API
 
       // Define the server URL of your Spring Boot API
-      final springBootApiUrl = 'http://192.168.8.156:8080/api/v1/auth/findDiseaseByName?name=$predicted_Label';
+      final springBootApiUrl = 'http://10.30.2.252:8080/api/v1/auth/findDiseaseByName?name=$predicted_Label';
 
       // Append the predictedLabel to the Spring Boot API URL
       //final fullUrl = '$springBootApiUrl$predictedLabel';
@@ -288,7 +289,7 @@ controller.setFlashMode(FlashMode.off);
         String diseaseName = data['diseaseName'];
         String solution = data['solution'];
         String image = data['image'];
-
+        HiveBoxes.history.add([diseaseName,solution,image]);
         // Navigate to the DiseaseDetailsPage and pass the disease details including predictedLabel
         Navigator.push(
           context,

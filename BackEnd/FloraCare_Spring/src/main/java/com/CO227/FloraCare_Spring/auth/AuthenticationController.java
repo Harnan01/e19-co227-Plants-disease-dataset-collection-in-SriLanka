@@ -1,5 +1,6 @@
 package com.CO227.FloraCare_Spring.auth;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin("http://192.168.8.155:65082")
+//@SecurityRequirement(name = "BearerAuth")
+@CrossOrigin("http://192.168.8.156:56865")
 public class AuthenticationController {
 
     private final AuthenticationService service;

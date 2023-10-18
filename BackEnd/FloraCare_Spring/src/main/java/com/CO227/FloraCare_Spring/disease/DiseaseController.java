@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin("http://192.168.8.156:50350")
+@CrossOrigin("http://192.168.8.156:56865")
 public class DiseaseController {
 
     @Autowired
