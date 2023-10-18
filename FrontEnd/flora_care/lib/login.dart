@@ -45,7 +45,7 @@ class _LogInState extends State<LogIn> {
   void logIn(String email, String password) async {
   try {
     final response = await http.post(
-      Uri.parse("http://192.168.8.156:8080/api/v1/auth/authenticate"),
+      Uri.parse("http://10.30.2.252:8080/api/v1/auth/authenticate"),
       headers: {
         'Content-Type': 'application/json',
       },
