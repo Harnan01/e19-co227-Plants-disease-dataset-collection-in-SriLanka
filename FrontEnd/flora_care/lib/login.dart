@@ -45,7 +45,7 @@ class _LogInState extends State<LogIn> {
   void logIn(String email, String password) async {
   try {
     final response = await http.post(
-      Uri.parse("http://10.30.2.252:8080/api/v1/auth/authenticate"),
+      Uri.parse("http://192.168.8.156:8080/api/v1/auth/authenticate"),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -348,7 +348,7 @@ Future<void> saveTokenToHive(String token) async {
                       height: size.height * 0.03,
                     ),
 
-                    GestureDetector(
+                    /*GestureDetector(
                       onTap: () {
                         // Navigate to the "Forgot Password" screen here.
                         // You can use a MaterialPageRoute or any routing method you prefer.
@@ -366,7 +366,7 @@ Future<void> saveTokenToHive(String token) async {
 
                     SizedBox(
                       height: size.height * 0.02,
-                    ),
+                    ),*/
 
                     /// Navigate To signup Screen
                     GestureDetector(

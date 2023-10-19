@@ -113,6 +113,7 @@ controller.setFlashMode(FlashMode.off);
     return SafeArea(child: new Stack(
       children: [
         FractionallySizedBox(
+    
           widthFactor: 1.0,
           heightFactor: 0.9, // Adjust this value to control the camera screen's size
           child: AspectRatio(
@@ -123,11 +124,15 @@ controller.setFlashMode(FlashMode.off);
             : CameraPreview(controller), // Display the camera previe
           ),
         ),
+
       Align(
+ 
   alignment: Alignment.bottomCenter,
   child: Padding(
+    
     padding: const EdgeInsets.only(bottom: 16.0),
     child: GestureDetector(
+      
       onTap: _onCapturePressed, // Specify the function to run when tapped
       child: Container(
         width: 64.0, // Adjust the width as needed
@@ -228,7 +233,7 @@ controller.setFlashMode(FlashMode.off);
     });
 
     // Define the server URL where you want to send the image
-    const serverUrl = 'http://10.30.2.252:5000/predict'; // Replace with your actual server URL
+    const serverUrl = 'http://192.168.8.156:5000/predict'; // Replace with your actual server URL
 
     // Create a multipart request
     var request = http.MultipartRequest('POST', Uri.parse(serverUrl));
@@ -261,7 +266,7 @@ controller.setFlashMode(FlashMode.off);
   }
 
   // Define the URL of your Flask API
-  const flaskApiUrl = 'http://10.30.2.252:5000/get-predicted-label';
+  const flaskApiUrl = 'http://192.168.8.156:5000/get-predicted-label';
   // Create an HTTP client
 
 
@@ -274,7 +279,7 @@ controller.setFlashMode(FlashMode.off);
       String predicted_Label = data['predictedLabel']; // Obtained from Flask API
 
       // Define the server URL of your Spring Boot API
-      final springBootApiUrl = 'http://10.30.2.252:8080/api/v1/auth/findDiseaseByName?name=$predicted_Label';
+      final springBootApiUrl = 'http://192.168.8.156:8080/api/v1/auth/findDiseaseByName?name=$predicted_Label';
 
       // Append the predictedLabel to the Spring Boot API URL
       //final fullUrl = '$springBootApiUrl$predictedLabel';
