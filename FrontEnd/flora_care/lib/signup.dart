@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
-
+//import 'homepage.dart';
 import 'login.dart';
 import '../constants.dart';
 import 'simple_ui_controller.dart';
+import 'HiveBoxes.dart';
+import 'package:hive/hive.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -36,12 +38,12 @@ class _SignUpState extends State<SignUp> {
   }
 
   SimpleUIController simpleUIController = Get.put(SimpleUIController());
-  String? token;
+  String token = "";
 
   void signUp(String username, String email, String password) async {
   try {
     final response = await http.post(
-      Uri.parse("http://10.30.2.252:8080/api/v1/auth/register"),
+      Uri.parse("http://192.168.8.156:8080/api/v1/auth/register"),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -58,6 +60,7 @@ class _SignUpState extends State<SignUp> {
       // Save the token in SharedPreferences here
        final jsonResponse = json.decode(response.body);
        token = jsonResponse['token'];
+       await saveTokenToHive(token);
        Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => MyApp()), // Replace with your home page widget
@@ -139,6 +142,12 @@ class _SignUpState extends State<SignUp> {
     
   }
 }
+
+Future<void> saveTokenToHive(String token) async {
+  final box = await Hive.openBox<String>(HiveBoxes.tokenBox);
+  await box.put('token', token);
+}
+
 
 
   @override
