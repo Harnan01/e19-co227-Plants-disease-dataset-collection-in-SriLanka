@@ -3,9 +3,13 @@ import 'package:flora_care/camera1.dart';
 import 'package:flutter/material.dart';
 //import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
+import 'package:http/http.dart' as http;
 //import 'history.dart';
 import 'HiveBoxes.dart';
+import 'package:hive/hive.dart';
+import 'login.dart';
+import 'diseasedetailspage.dart';
+//import 'HiveBoxes.dart';
 
 //import 'package:flutter/material.dart';
 
@@ -34,13 +38,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedPage = 0;
 
-
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    History()
+    History(),
   ];
-
-  //late List<CameraDescription> cameras = this.cameras;
 
   @override
   Widget build(BuildContext context) {
@@ -64,14 +65,49 @@ class _MyHomePageState extends State<MyHomePage> {
             text: 'Home',
           ),
           GButton(icon: Icons.history, text: 'History'),
-
         ],
       ),
     );
   }
 }
 
+void _handleLogout(BuildContext context, String token) async {
+  try {
+    // Send a request to your Spring Boot API to expire the token
+    final response = await http.post(
+      Uri.parse("http://192.168.8.156:8080/api/v1/auth/logout"), // Replace with your API endpoint
+      headers: {
+        'Authorization': 'Bearer $token', // Include the token in the request headers
+      },
+    );
 
+    if (response.statusCode == 200) {
+      // Token expired successfully, remove it from storage and navigate to the login page
+      await removeTokenFromStorage();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LogIn()),
+      );
+    } else {
+      // Handle errors, e.g., token not expired
+      // You can show an error message to the user or take appropriate action.
+    }
+  } catch (error) {
+    // Handle network errors or other exceptions
+    // You can show an error message to the user or take appropriate action.
+  }
+}
+
+
+// Function to remove the token from storage (using Hive)
+Future<void> removeTokenFromStorage() async {
+  try {
+    final box = await Hive.openBox<String>(HiveBoxes.tokenBox);
+    await box.delete('token');
+  } catch (e) {
+    // Handle any potential errors, e.g., when Hive is not initialized or the box doesn't exist
+  }
+}
 
 
 class HomePage extends StatefulWidget {
@@ -129,7 +165,17 @@ class _HomePageState extends State<HomePage> {
                               Icons.logout,
                               color: Colors.white,
                             ),
-                            onPressed: () {},
+                            onPressed: () async{final token = await getTokenFromStorage(); // Implement this function
+
+    if (token != null) {
+      // Call the logout function with context and token
+      _handleLogout(context, token);
+    } else {
+      // Handle the case where the token is not available
+      // You can show an error message or take appropriate action.
+    }
+
+                            },
                           ),
                         )
                       ],
@@ -235,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                                 alignment: Alignment.center,
                                 child: Text(
-                                  "Take the picture",
+                                  "Find the Solution",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 20,
@@ -269,7 +315,7 @@ class _HomePageState extends State<HomePage> {
                                 alignment: Alignment.center,
                                 color: Colors.white,
                                 child: Text(
-                                  "Take the picture",
+                                  "Treat the Plant",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 20,
@@ -319,6 +365,18 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+
+Future<String?> getTokenFromStorage() async {
+  try {
+    final box = await Hive.openBox<String>(HiveBoxes.tokenBox);
+    final token = box.get('token');
+    return token;
+  } catch (e) {
+    // Handle any potential errors, e.g., when Hive is not initialized or the box doesn't exist
+    return null;
+  }
+}
+
 class History extends StatelessWidget {
   const History({super.key});
 
@@ -340,11 +398,26 @@ class History extends StatelessWidget {
           itemCount: HiveBoxes.history.items.length,
           itemBuilder: (context, index) {
             final item = HiveBoxes.history.items[index];
-            final diseaseName = item[0]; // Access disease name from the list
+            final diseaseName = item[0],solution = item[1],image=item[2]; // Access disease name from the list
 
-            return ListTile(
-              title: Text(diseaseName),
-              // You can display other data (solution, image) as needed
+            return GestureDetector(
+              onTap: () {
+                // Handle item click here, e.g., navigate to a new widget
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => DiseaseDetailsPage(
+                      diseaseName: diseaseName,
+                      solution: solution,
+                      imageUrl: image,
+                      // Pass other data as needed
+                    ),
+                  ),
+                );
+              },
+              child: ListTile(
+                title: Text(diseaseName),
+                // You can display other data (solution, image) as needed
+              ),
             );
           },
         ));
